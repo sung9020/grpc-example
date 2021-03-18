@@ -17,8 +17,10 @@ fun main(args: Array<String>){
 		.build()
 
 	val stub = HelloServiceGrpc.newBlockingStub(channel)
-	val response = stub.sayHello(getHelloRequest("ping", 1L))
-	println("response = ${response.pong},${response.id}")
+	val response = stub.lotsOfResponse(getHelloRequest("ping", 1L))
+	response.forEach {
+		println("snow response: ${it.pong}, ${it.id}")
+	}
 }
 
 fun getHelloRequest(ping: String, id: Long): Hello.MessageRequest {

@@ -2,6 +2,7 @@ package com.snow.rpc
 import HelloServiceGrpc
 import io.grpc.ServerBuilder
 import io.grpc.stub.StreamObserver
+import java.lang.Thread.sleep
 
 /*
 *
@@ -25,6 +26,23 @@ class HelloService : HelloServiceGrpc.HelloServiceImplBase() {
 		println("Hello snow ${request?.ping}, ${request?.id}")
 		val response = Hello.MessageResposne.newBuilder().setPong(request?.ping).build()
 		responseObserver?.onNext(response)
+		responseObserver?.onCompleted()
+	}
+
+	override fun lotsOfResponse(
+		request: Hello.MessageRequest?,
+		responseObserver: StreamObserver<Hello.MessageResposne>?
+	) {
+		println("snow lotsOfResponse")
+
+		for(i in 0..5){
+			val response = Hello.MessageResposne
+				.newBuilder()
+				.setPong("hello snow id: $i")
+				.build()
+			responseObserver?.onNext(response)
+			sleep(100)
+		}
 		responseObserver?.onCompleted()
 	}
 }
